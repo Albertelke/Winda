@@ -9,7 +9,7 @@
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
-TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
+TCHAR szTitle[MAX_LOADSTRING];					// The tit le bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 
 INT value;
@@ -20,6 +20,23 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
+class elevator
+{
+
+public:
+	elevator();
+	PointF position;
+	PointF size;
+
+};
+
+elevator::elevator()
+{
+	position = PointF(300.0f, 680.0f);
+		size = PointF(200.0f, 80.0f);
+
+}
+elevator winda;
 
 
 
@@ -28,7 +45,19 @@ void MyOnPaint(HDC hdc)
 	value++;
 	Graphics graphics(hdc);
 	Pen pen(Color(255,0,0,0));
-	//graphics.DrawLine(&pen,0,0,200,100);
+	SolidBrush mybrush(Color(255, 0, 102, 255));
+	SolidBrush floorbrush(Color(255, 204, 51, 255));
+
+	//graphics.Dr awLine(&pen,0,0,200,100);
+	int l_y = 150;
+	int l_x = 300;
+	for (int i = 0; i < 5; i++)
+	{
+		graphics.FillRectangle(&mybrush, i%2*500,l_y*(i+1) , 300, 10);
+
+	}
+	graphics.DrawRectangle(&pen, winda.position.X, winda.position.Y, winda.size.X, winda.size.Y);
+	graphics.FillRectangle(&floorbrush, winda.position.X, winda.position.Y+70, winda.size.X, 10.0f);
 
 	
 }
@@ -53,7 +82,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
  	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
-
 	value= 10;
 
 	GdiplusStartupInput gdiplusStartupInput;
@@ -108,7 +136,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
-	int n;
 	wcex.style			= CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc	= WndProc;
 	wcex.cbClsExtra		= 0;
@@ -194,7 +221,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO: Add any drawing code here...
+		
 		MyOnPaint(hdc);
 		EndPaint(hWnd, &ps);
 		break;
