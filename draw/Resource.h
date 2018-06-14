@@ -19,6 +19,27 @@
 #endif
 // Next default values for new objects
 //
+#define ID_BUTTON1                3
+#define ID_BUTTON2                4
+#define ID_BUTTON3                5
+#define ID_BUTTON4                6
+#define ID_BUTTON5                7
+#define ID_BUTTON6                8
+#define ID_BUTTON7                9
+#define ID_BUTTON8                10
+#define ID_BUTTON9                11
+#define ID_BUTTON10                12
+#define ID_BUTTON11                13
+#define ID_BUTTON12                14
+#define ID_BUTTON13                15
+#define ID_BUTTON14                16
+#define ID_BUTTON15                17
+#define ID_BUTTON16                18
+#define ID_BUTTON17                19
+#define ID_BUTTON18                20
+#define ID_BUTTON19                21
+#define ID_BUTTON20                22
+
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

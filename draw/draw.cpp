@@ -19,7 +19,7 @@ ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
-
+HWND hwndButton;
 class elevator
 {
 
@@ -32,8 +32,8 @@ public:
 
 elevator::elevator()
 {
-	position = PointF(300.0f, 680.0f);
-		size = PointF(200.0f, 80.0f);
+	position = PointF(300.0f, 665.0f);
+		size = PointF(200.0f, 95.0f);
 
 }
 elevator winda;
@@ -57,7 +57,9 @@ void MyOnPaint(HDC hdc)
 
 	}
 	graphics.DrawRectangle(&pen, winda.position.X, winda.position.Y, winda.size.X, winda.size.Y);
-	graphics.FillRectangle(&floorbrush, winda.position.X, winda.position.Y+70, winda.size.X, 10.0f);
+	graphics.FillRectangle(&floorbrush, winda.position.X, winda.position.Y+85, winda.size.X, 10.0f);
+	
+
 
 	
 }
@@ -169,6 +171,195 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+  
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("2"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 720,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("3"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 700,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("4"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 680,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("5"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 660,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+
+
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("1"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 570,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("3"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 550,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("4"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 530,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("5"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 510,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+
+
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("1"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 420,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("2"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 400,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("4"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 380,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("5"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 360,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+
+
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("1"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 270,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("2"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 250,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("3"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 230,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("5"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   770, 210,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+
+
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("1"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 120,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("2"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 100,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("3"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 80,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
+   hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
+	   TEXT("4"),                  // the caption of the button
+	   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,  // the styles
+	   10, 60,                                  // the left and top co-ordinates
+	   20, 20,                              // width and height
+	   hWnd,                                 // parent window handle
+	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   hInstance,                            // the instance of your application
+	   NULL);                               // extra bits you dont really need
    
    OnCreate(hWnd);
 
@@ -214,6 +405,86 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
+			break;
+		case ID_BUTTON1:
+			
+
+			break;
+		case ID_BUTTON2:
+
+
+			break;
+		case ID_BUTTON3:
+
+
+			break;
+		case ID_BUTTON4:
+
+
+			break;
+		case ID_BUTTON5:
+
+
+			break;
+		case ID_BUTTON6:
+
+
+			break;
+		case ID_BUTTON7:
+
+
+			break;
+		case ID_BUTTON8:
+
+
+			break;
+		case ID_BUTTON9:
+
+
+			break;
+		case ID_BUTTON10:
+
+
+			break;
+		case ID_BUTTON11:
+
+
+			break;
+		case ID_BUTTON12:
+
+
+			break;
+		case ID_BUTTON13:
+
+
+			break;
+		case ID_BUTTON14:
+
+
+			break;
+		case ID_BUTTON15:
+
+
+			break;
+		case ID_BUTTON16:
+
+
+			break;
+		case ID_BUTTON17:
+
+
+			break;
+		case ID_BUTTON18:
+
+
+			break;
+		case ID_BUTTON19:
+
+
+			break;
+		case ID_BUTTON20:
+
+
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
