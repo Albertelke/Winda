@@ -26,20 +26,22 @@ HWND hwndButton;
 class people
 {
 public:
-	people(int d,int sp, PointF pos);
+	people(int d,int sp, PointF pos,int ww_l);
 	int destination;
 	PointF position;
 	PointF size;
-	int direction;
+	//int direction;
 	int speed;
+	int w_l;
 };
 
-people::people(int d, int sp, PointF pos)
+people::people(int d, int sp, PointF pos,int ww_l)
 {
 	destination = d;
 	size = PointF(19.0f,60.0f);
 	position = pos;
-	speed = sp;
+	speed = sp*5;
+	w_l = ww_l;
 }
 
 
@@ -71,6 +73,7 @@ public:
 	void walk();
 	bool slots[5][12];
 	bool is_free_slot(int w_l);
+	int  next_free_slot(int w_l,size_t t);
 };
 
 engine::engine()
@@ -78,6 +81,63 @@ engine::engine()
 	for (int i = 0; i < 5; i++)
 		for (int j = 0; j < 12; j++)
 			slots[i][j] = 0;
+}
+int engine::next_free_slot(int w_l,size_t t)
+{
+	int h;
+	if (w_l % 2 == 0)
+	{
+		h = int((passengers[t].position.X - 6) / 25);
+		if (slots[w_l][h] == 0)
+			for (int i = 11; i >= 0; i--)
+			{
+				if (slots[w_l][i] == 0)
+					return i;
+			}
+	}
+	else h = int((passengers[t].position.X - 500) / 25);
+	if(slots[w_l][h]==0)
+	for (int i = 0; i < 12; i++)
+	{
+		if (slots[w_l][i] == 0)
+			return i;
+	}
+	return -1;
+}
+
+void engine::walk()
+{
+	for (size_t i = 0; i < passengers.size(); i++)
+	{
+		int p=next_free_slot(passengers[i].w_l,i);
+		if (p != -1)
+		{
+			if (passengers[i].w_l % 2 == 0)
+			{
+				if (abs(passengers[i].position.X - (6 + 25 * p)) <= 5)
+				{
+					passengers[i].position.X = (6 + 25 * p);
+					slots[passengers[i].w_l][p] = 1;
+				}
+
+				else
+					passengers[i].position.X += passengers[i].speed;
+			}
+			if (passengers[i].w_l % 2 == 1)
+			{
+				if (abs(passengers[i].position.X - (500+(p)*25)) <= 5)
+				{
+					passengers[i].position.X = (500+(p)*25);
+					slots[passengers[i].w_l][p] = 1;
+				}
+
+				else
+					passengers[i].position.X += passengers[i].speed;
+			}
+			
+		}
+		
+	}
 }
 
 bool engine::is_free_slot(int w_l)
@@ -92,7 +152,7 @@ void engine::add_passenger(int w_l, int dest)
 	if (is_free_slot(w_l))
 	{
 		float pom = (4 - w_l)*150.0f;
-		passengers.push_back(people(dest, pow(-1, w_l), PointF((w_l % 2)*800.0f, pom+90.0f)));
+		passengers.push_back(people(dest, pow(-1, w_l), PointF((w_l % 2)*800.0f, pom+90.0f),w_l));
 	}
 
 
@@ -575,6 +635,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				hdc = BeginPaint(hWnd, &ps);
 				MyOnPaint(hdc);
 				EndPaint(hWnd, &ps);
+				main_engine.walk();
+				
 			break;
 		}
 
