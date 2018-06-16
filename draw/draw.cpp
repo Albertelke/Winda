@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include "draw.h"
+#include<vector>
+#include <cmath>
 
 #define MAX_LOADSTRING 100
 #define TMR_1 1
@@ -20,6 +22,28 @@ BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 HWND hwndButton;
+
+class people
+{
+public:
+	people(int d,int sp, PointF pos);
+	int destination;
+	PointF position;
+	PointF size;
+	int direction;
+	int speed;
+};
+
+people::people(int d, int sp, PointF pos)
+{
+	destination = d;
+	size = PointF(19.0f,60.0f);
+	position = pos;
+	speed = sp;
+}
+
+
+
 class elevator
 {
 
@@ -38,6 +62,44 @@ elevator::elevator()
 }
 elevator winda;
 
+class engine
+{
+public:
+	engine();
+	std::vector <people> passengers;
+	void add_passenger(int w_l, int dest);
+	void walk();
+	bool slots[5][12];
+	bool is_free_slot(int w_l);
+};
+
+engine::engine()
+{
+	for (int i = 0; i < 5; i++)
+		for (int j = 0; j < 12; j++)
+			slots[i][j] = 0;
+}
+
+bool engine::is_free_slot(int w_l)
+{
+	for (int i = 0; i < 12; i++)
+		if (slots[w_l][i] == 0) return true;
+
+		 return false;
+}
+void engine::add_passenger(int w_l, int dest)
+{
+	if (is_free_slot(w_l))
+	{
+		float pom = (4 - w_l)*150.0f;
+		passengers.push_back(people(dest, pow(-1, w_l), PointF((w_l % 2)*800.0f, pom+90.0f)));
+	}
+
+
+}
+
+engine main_engine;
+
 
 
 void MyOnPaint(HDC hdc)
@@ -47,6 +109,7 @@ void MyOnPaint(HDC hdc)
 	Pen pen(Color(255,0,0,0));
 	SolidBrush mybrush(Color(255, 0, 102, 255));
 	SolidBrush floorbrush(Color(255, 204, 51, 255));
+	SolidBrush person_color(Color(255, 0, 0, 0));
 
 	//graphics.Dr awLine(&pen,0,0,200,100);
 	int l_y = 150;
@@ -58,6 +121,9 @@ void MyOnPaint(HDC hdc)
 	}
 	graphics.DrawRectangle(&pen, winda.position.X, winda.position.Y, winda.size.X, winda.size.Y);
 	graphics.FillRectangle(&floorbrush, winda.position.X, winda.position.Y+85, winda.size.X, 10.0f);
+	for (size_t i = 0; i < main_engine.passengers.size(); i++)
+		graphics.FillRectangle(&person_color, main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
+
 	
 
 
@@ -187,7 +253,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 700,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON2,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -196,7 +262,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 680,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON3,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -205,7 +271,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 660,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON4,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
 
@@ -216,7 +282,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 570,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON5,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -225,7 +291,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 550,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON6,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -234,7 +300,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 530,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON7,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -243,7 +309,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 510,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON8,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
 
@@ -254,7 +320,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 420,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON9,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -263,7 +329,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 400,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON10,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -272,7 +338,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 380,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON11,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -281,7 +347,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 360,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON12,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
 
@@ -292,7 +358,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 270,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON13,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -301,7 +367,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 250,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON14,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -310,7 +376,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 230,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON15,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -319,7 +385,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   770, 210,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON16,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
 
@@ -330,7 +396,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 120,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON17,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -339,7 +405,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 100,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON18,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -348,7 +414,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 80,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON19,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    hwndButton = CreateWindow(TEXT("button"),                      // The class name required is button
@@ -357,7 +423,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   10, 60,                                  // the left and top co-ordinates
 	   20, 20,                              // width and height
 	   hWnd,                                 // parent window handle
-	   (HMENU)ID_BUTTON1,                   // the ID of your button
+	   (HMENU)ID_BUTTON20,                   // the ID of your button
 	   hInstance,                            // the instance of your application
 	   NULL);                               // extra bits you dont really need
    
@@ -407,83 +473,83 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hWnd);
 			break;
 		case ID_BUTTON1:
-			
+			main_engine.add_passenger(0, 1);
 
 			break;
 		case ID_BUTTON2:
-
+			main_engine.add_passenger(0, 2);
 
 			break;
 		case ID_BUTTON3:
-
+			main_engine.add_passenger(0, 3);
 
 			break;
 		case ID_BUTTON4:
-
+			main_engine.add_passenger(0, 4);
 
 			break;
 		case ID_BUTTON5:
-
+			main_engine.add_passenger(1, 0);
 
 			break;
 		case ID_BUTTON6:
-
+			main_engine.add_passenger(1, 2);
 
 			break;
 		case ID_BUTTON7:
-
+			main_engine.add_passenger(1, 3);
 
 			break;
 		case ID_BUTTON8:
-
+			main_engine.add_passenger(1, 4);
 
 			break;
 		case ID_BUTTON9:
-
+			main_engine.add_passenger(2, 0);
 
 			break;
 		case ID_BUTTON10:
-
+			main_engine.add_passenger(2, 1);
 
 			break;
 		case ID_BUTTON11:
-
+			main_engine.add_passenger(2, 3);
 
 			break;
 		case ID_BUTTON12:
-
+			main_engine.add_passenger(2, 4);
 
 			break;
 		case ID_BUTTON13:
-
+			main_engine.add_passenger(3, 0);
 
 			break;
 		case ID_BUTTON14:
-
+			main_engine.add_passenger(3, 1);
 
 			break;
 		case ID_BUTTON15:
-
+			main_engine.add_passenger(3, 2);
 
 			break;
 		case ID_BUTTON16:
-
+			main_engine.add_passenger(3, 4);
 
 			break;
 		case ID_BUTTON17:
-
+			main_engine.add_passenger(4,0);
 
 			break;
 		case ID_BUTTON18:
-
+			main_engine.add_passenger(4, 1);
 
 			break;
 		case ID_BUTTON19:
-
+			main_engine.add_passenger(4, 2);
 
 			break;
 		case ID_BUTTON20:
-
+			main_engine.add_passenger(4, 3);
 
 			break;
 		default:
