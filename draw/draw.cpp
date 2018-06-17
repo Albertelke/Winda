@@ -23,6 +23,7 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 HWND hwndButton;
 
+
 class people
 {
 public:
@@ -33,7 +34,44 @@ public:
 	//int direction;
 	int speed;
 	int w_l;
+	bool is_in;
 };
+
+class elevator
+{
+	friend class winda;
+public:
+	elevator();
+	PointF position;
+	PointF size;
+	int slots[8];
+	std::vector <int> callings;
+	void moving();
+	bool is_going_up;
+	void load();
+	int w_l = 0;
+	int is_free_slot();
+
+};
+elevator winda;
+
+class engine
+{
+	friend class elevator;
+public:
+	engine();
+	std::vector <people> passengers;
+	void add_passenger(int w_l, int dest);
+	void walk();
+	bool slots[5][12];
+	bool is_free_slot(int w_l);
+	int  next_free_slot(int w_l, size_t t);
+
+};
+
+engine main_engine;
+
+
 
 people::people(int d, int sp, PointF pos,int ww_l)
 {
@@ -42,39 +80,58 @@ people::people(int d, int sp, PointF pos,int ww_l)
 	position = pos;
 	speed = sp*5;
 	w_l = ww_l;
+	is_in = 0;
 }
 
 
 
-class elevator
-{
 
-public:
-	elevator();
-	PointF position;
-	PointF size;
 
-};
 
 elevator::elevator()
 {
 	position = PointF(300.0f, 665.0f);
-		size = PointF(200.0f, 95.0f);
+	size = PointF(200.0f, 95.0f);
+	for (int i = 0; i < 8; i++)
+		slots[i] = 0;
+	bool is_going_up = 1;
+
 
 }
-elevator winda;
 
-class engine
+int elevator::is_free_slot()
 {
-public:
-	engine();
-	std::vector <people> passengers;
-	void add_passenger(int w_l, int dest);
-	void walk();
-	bool slots[5][12];
-	bool is_free_slot(int w_l);
-	int  next_free_slot(int w_l,size_t t);
-};
+	for (int i = 0; i < 8; i++)
+		if (slots[i] == 0) return i;
+	return -1;
+}
+void elevator::moving()
+{
+
+
+}
+void elevator::load()
+{
+	for (size_t t = 0; t < main_engine.passengers.size(); t++)
+		if (is_free_slot() != -1)
+		{
+
+			if (main_engine.passengers[t].w_l == w_l && int((main_engine.passengers[t].position.X - 6) / 25) == 11)
+
+			{
+				main_engine.passengers[t].position.X += (is_free_slot() + 1) * 25;
+				slots[is_free_slot()] = 1;
+				main_engine.passengers[t].is_in = 1;
+				for (int i = 0; i < 12; i++)
+					main_engine.slots[w_l][i] = 0;
+			}
+		}
+}
+
+
+
+
+
 
 engine::engine()
 {
@@ -82,6 +139,8 @@ engine::engine()
 		for (int j = 0; j < 12; j++)
 			slots[i][j] = 0;
 }
+
+
 int engine::next_free_slot(int w_l,size_t t)
 {
 	int h;
@@ -109,6 +168,11 @@ void engine::walk()
 {
 	for (size_t i = 0; i < passengers.size(); i++)
 	{
+		if (passengers[i].is_in == 1)
+		{
+			passengers[i].position.Y = winda.position.Y+25;
+			continue;
+		}
 		int p=next_free_slot(passengers[i].w_l,i);
 		if (p != -1)
 		{
@@ -158,7 +222,7 @@ void engine::add_passenger(int w_l, int dest)
 
 }
 
-engine main_engine;
+
 
 
 
@@ -534,7 +598,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case ID_BUTTON1:
 			main_engine.add_passenger(0, 1);
-
+			
 			break;
 		case ID_BUTTON2:
 			main_engine.add_passenger(0, 2);
@@ -636,6 +700,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				MyOnPaint(hdc);
 				EndPaint(hWnd, &ps);
 				main_engine.walk();
+				winda.load();
 				
 			break;
 		}
