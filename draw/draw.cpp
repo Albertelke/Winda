@@ -5,6 +5,11 @@
 #include "draw.h"
 #include<vector>
 #include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <time.h>
+#include <ctime>
+
 
 #define MAX_LOADSTRING 100
 #define TMR_1 1
@@ -148,8 +153,10 @@ bool elevator::unload()
 			slots[int(((main_engine.passengers[t].position.X - 281) / 25) - 1)] = 0;
 			main_engine.passengers[t].is_out = 1;
 			main_engine.passengers[t].is_in = 0;
-			if (w_l % 2 == 0) main_engine.passengers[t].speed = -5;
-			else main_engine.passengers[t].speed = 5;
+			if (w_l % 2 == 0) main_engine.passengers[t].speed = -(rand()%15+5);
+			else main_engine.passengers[t].speed = (rand()%15+5);
+			for (int i = 0; i < 100; ++i) rand();
+			
 			if (w_l % 2 == 1)
 				main_engine.passengers[t].position.X = 500;
 			else main_engine.passengers[t].position.X = 281;
@@ -369,7 +376,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	MSG msg;
 	HACCEL hAccelTable;
 	value= 10;
-
+    srand(time(NULL));
 	GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR           gdiplusToken;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
