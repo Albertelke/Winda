@@ -35,6 +35,7 @@ public:
 	int speed;
 	int w_l;
 	bool is_in;
+	bool is_out;
 };
 
 class elevator
@@ -66,6 +67,7 @@ public:
 	bool slots[5][12];
 	bool is_free_slot(int w_l);
 	int  next_free_slot(int w_l, size_t t);
+	bool are_people();
 
 };
 
@@ -81,6 +83,8 @@ people::people(int d, int sp, PointF pos,int ww_l)
 	speed = sp*5;
 	w_l = ww_l;
 	is_in = 0;
+	bool is_out = 0;
+	
 }
 
 
@@ -107,24 +111,69 @@ int elevator::is_free_slot()
 }
 void elevator::moving()
 {
+	if (w_l == 4) is_going_up = 0;
+	if (w_l == 0) is_going_up = 1;
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (position.Y == (4 - i) * 150 + 65)
+		{
+			w_l = i;
+			break;
+		}
+		else w_l = -1;
+	}
+	load();
+	if (main_engine.are_people()==0 || is_free_slot() == -1 )
+	{
+		if (is_going_up == 1)
+			position.Y -= 5;
+		
+		else if (is_going_up == 0)
+			position.Y += 5;
+		
+	}
+	
+		
+			
+	}
+			
 
 
-}
+
+	
+
+	
+
 void elevator::load()
 {
 	for (size_t t = 0; t < main_engine.passengers.size(); t++)
-		if (is_free_slot() != -1)
+		if (is_free_slot() != -1 && w_l != -1)
 		{
+			if(w_l %2 == 0)
+				if (main_engine.passengers[t].w_l == w_l && int((main_engine.passengers[t].position.X - 6) / 25) == 11)
 
-			if (main_engine.passengers[t].w_l == w_l && int((main_engine.passengers[t].position.X - 6) / 25) == 11)
-
+					{
+						main_engine.passengers[t].position.X += (is_free_slot() + 1) * 25;
+						slots[is_free_slot()] = 1;
+						main_engine.passengers[t].is_in = 1;
+						for (int i = 0; i < 12; i++)
+						main_engine.slots[w_l][i] = 0;
+					}
+			if (w_l % 2 == 1)
 			{
-				main_engine.passengers[t].position.X += (is_free_slot() + 1) * 25;
-				slots[is_free_slot()] = 1;
-				main_engine.passengers[t].is_in = 1;
-				for (int i = 0; i < 12; i++)
-					main_engine.slots[w_l][i] = 0;
+				if (main_engine.passengers[t].w_l == w_l && int(main_engine.passengers[t].position.X) == 500)
+
+				{
+					main_engine.passengers[t].position.X =281.0f+ (is_free_slot() + 1) * 25;
+					slots[is_free_slot()] = 1;
+					main_engine.passengers[t].is_in = 1;
+					for (int i = 0; i < 12; i++)
+						main_engine.slots[w_l][i] = 0;
+				}
+				
 			}
+		
 		}
 }
 
@@ -163,14 +212,23 @@ int engine::next_free_slot(int w_l,size_t t)
 	}
 	return -1;
 }
-
+bool engine::are_people()
+{
+	for (size_t t = 0; t < passengers.size(); t++)
+	{
+		if (passengers[t].w_l == winda.w_l && passengers[t].is_in != 1) return 1;
+	}
+		return 0;
+}
 void engine::walk()
 {
 	for (size_t i = 0; i < passengers.size(); i++)
 	{
 		if (passengers[i].is_in == 1)
 		{
+			
 			passengers[i].position.Y = winda.position.Y+25;
+			
 			continue;
 		}
 		int p=next_free_slot(passengers[i].w_l,i);
@@ -700,7 +758,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				MyOnPaint(hdc);
 				EndPaint(hWnd, &ps);
 				main_engine.walk();
-				winda.load();
+				winda.moving();
 				
 			break;
 		}
