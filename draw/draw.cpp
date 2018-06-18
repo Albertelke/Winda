@@ -50,6 +50,7 @@ public:
 	void moving();
 	bool is_going_up;
 	void load();
+	bool unload();
 	int w_l = 0;
 	int is_free_slot();
 
@@ -124,7 +125,7 @@ void elevator::moving()
 		else w_l = -1;
 	}
 	load();
-	if (main_engine.are_people()==0 || is_free_slot() == -1 )
+	if (unload() == 0 && (main_engine.are_people()==0 || is_free_slot() == -1 ) )
 	{
 		if (is_going_up == 1)
 			position.Y -= 5;
@@ -138,7 +139,32 @@ void elevator::moving()
 			
 	}
 			
+bool elevator::unload()
+{
+	for (size_t t = 0; t < main_engine.passengers.size(); t++)
+	{
+		if (main_engine.passengers[t].destination == w_l && main_engine.passengers[t].is_in == 1)
+		{
+			slots[int(((main_engine.passengers[t].position.X - 281) / 25) - 1)] = 0;
+			main_engine.passengers[t].is_out = 1;
+			main_engine.passengers[t].is_in = 0;
+			if (w_l % 2 == 0) main_engine.passengers[t].speed = -5;
+			else main_engine.passengers[t].speed = 5;
+			if (w_l % 2 == 1)
+				main_engine.passengers[t].position.X = 500;
+			else main_engine.passengers[t].position.X = 281;
+			break;
+		}
 
+	}
+	for (size_t t = 0; t < main_engine.passengers.size(); t++)
+	{
+		if (main_engine.passengers[t].destination == w_l && main_engine.passengers[t].is_in == 1)
+			return 1;
+	}
+	 return 0;
+
+}
 
 
 	
@@ -224,6 +250,16 @@ void engine::walk()
 {
 	for (size_t i = 0; i < passengers.size(); i++)
 	{
+		if (passengers[i].is_out == 1)
+		{
+			if (passengers[i].position.X < 0 || passengers[i].position.X>800)
+			{
+				passengers.erase(passengers.begin()+i);
+				continue;
+			}
+			passengers[i].position.X += passengers[i].speed;
+			continue;
+		}
 		if (passengers[i].is_in == 1)
 		{
 			
