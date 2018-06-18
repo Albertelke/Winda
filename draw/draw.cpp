@@ -339,18 +339,30 @@ void MyOnPaint(HDC hdc)
 	//graphics.Dr awLine(&pen,0,0,200,100);
 	int l_y = 150;
 	int l_x = 300;
-	for (int i = 0; i < 5; i++)
-	{
-		graphics.FillRectangle(&mybrush, i%2*500,l_y*(i+1) , 300, 10);
+	
+	
+	graphics.FillRectangle(&SolidBrush(Color(255,0,255,0)), 0%2*500 ,l_y*(0+1) , 300, 10);
+	graphics.FillRectangle(&SolidBrush(Color(255,51,153,235)), 1 % 2 * 500, l_y*( 2), 300, 10);
+	graphics.FillRectangle(&SolidBrush(Color(255,204,133,0)), 2 % 2 * 500, l_y*(3), 300, 10);
+	graphics.FillRectangle(&SolidBrush(Color(255,255,153,255)), 3 % 2 * 500, l_y*(4), 300, 10);
+	graphics.FillRectangle(&SolidBrush(Color(255,0,0,153)), 4 % 2 * 500, l_y*(5), 300, 10);
 
-	}
+	
 	graphics.DrawRectangle(&pen, winda.position.X, winda.position.Y, winda.size.X, winda.size.Y);
 	graphics.FillRectangle(&floorbrush, winda.position.X, winda.position.Y+85, winda.size.X, 10.0f);
 	for (size_t i = 0; i < main_engine.passengers.size(); i++)
-		graphics.FillRectangle(&person_color, main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
-
-	
-
+	{
+		if(main_engine.passengers[i].destination == 4)
+		graphics.FillRectangle(&SolidBrush(Color(255, 0, 255, 0)), main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
+		if (main_engine.passengers[i].destination == 3)
+			graphics.FillRectangle(&SolidBrush(Color(255, 51, 153, 235)), main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
+		if (main_engine.passengers[i].destination == 2)
+			graphics.FillRectangle(&SolidBrush(Color(255, 204, 133, 0)), main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
+		if (main_engine.passengers[i].destination == 1)
+			graphics.FillRectangle(&SolidBrush(Color(255, 255, 153, 255)), main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
+		if (main_engine.passengers[i].destination == 0)
+			graphics.FillRectangle(&SolidBrush(Color(255, 0, 0, 153)), main_engine.passengers[i].position.X, main_engine.passengers[i].position.Y, main_engine.passengers[i].size.X, main_engine.passengers[i].size.Y);
+	}
 
 	
 }
